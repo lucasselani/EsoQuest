@@ -1,0 +1,24 @@
+page-questlist {
+    .rounded-avatar {
+        border-radius: 50%;
+        background-color: #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    label.questlevel {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 36px;  
+    }
+
+    h2.questlevel {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 12px;  
+    }
+
+    
+}
