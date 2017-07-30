@@ -15,8 +15,8 @@ import { QuestDetail, Rewards, Steps } from '../../model/questdetail';
   templateUrl: 'quest-detail.html',
 })
 export class QuestDetailPage {
-  questId: number;
-  quest: QuestDetail;
+  private questId: number;
+  public quest: QuestDetail = null;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public restapi: RestapiProvider) {
     this.questId = navParams.data;

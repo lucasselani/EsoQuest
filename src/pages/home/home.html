@@ -1,13 +1,12 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      ESO: Quests
-    </ion-title>
-  </ion-navbar>
+  <ion-title>
+    <img src="../../assets/eso-icon.png" class="eso-icon" item-start alt="logo" height="40">
+    <label class="app-name">ESO: Database</label>
+  </ion-title>
 </ion-header>
 
-<ion-content padding>
-  <ion-auto-complete [dataProvider]="autoComplete"></ion-auto-complete>
+<ion-content padding class="background">
+  <ion-auto-complete (itemSelected)="openItem()" [dataProvider]="autoComplete" #searchbar></ion-auto-complete>
   <h5>OR</h5>
   <button ion-button (click)="questList()">All Quests</button>
 </ion-content>

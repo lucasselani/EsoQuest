@@ -1,17 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { RestapiProvider } from '../../providers/restapi/restapi';
 import { QuestItem } from '../../model/questitem';
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
 import { QuestlistPage } from '../questlist/questlist';
+import { QuestDetailPage } from '../quest-detail/quest-detail';
+import { AutoCompleteComponent } from 'ionic2-auto-complete';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  table: any;
-  quests: any;
+  @ViewChild('searchbar')
+  searchbar: AutoCompleteComponent;
+
+  table: string;
+  quests: Array<QuestItem>;
   questValue: number = 0;
 
   constructor(public navCtrl: NavController, public restapi: RestapiProvider, public autoComplete: AutoCompleteProvider) {
@@ -57,5 +62,12 @@ export class HomePage {
 
   questList(){
     this.navCtrl.push(QuestlistPage, this.quests);
+  }
+
+  openItem(){
+    let name = this.searchbar.getValue();
+    this.quests.forEach(item => {
+      if(item.name == name) this.navCtrl.push(QuestDetailPage, item.id);
+    });    
   }
 }
