@@ -25,6 +25,10 @@ export class RestapiProvider {
     });
   }
 
+  public getQuestsFromFile() {
+    return this.http.get("../assets/quests.json").map(res => {return res.json()});
+  }
+
   public getQuestDetails(id:number): Promise<any> {
     return new Promise(resolve => {
       this.http.get(this.urlQuestDetails+id).subscribe(data => resolve(data));

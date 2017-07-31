@@ -1,4 +1,11 @@
 page-questlist {
+    ion-title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: start;
+    }
+
     .rounded-avatar {
         border-radius: 50%;
         background-color: #ccc;
@@ -18,7 +25,22 @@ page-questlist {
         text-align: center;
         vertical-align: middle;
         line-height: 12px;  
+        color:white;
     }
 
-    
+    .background {
+        background: url("../assets/background.jpg") no-repeat center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    ion-item.dark-list {
+        background: rgba(0,0,0,0.7) !important;
+        border-bottom: 1px solid !important;
+        margin-bottom: 4px;
+    }
+
+    .item .item-content {
+        background-color: transparent !important;
+    }
 }

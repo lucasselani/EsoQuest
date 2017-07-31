@@ -26,10 +26,6 @@ export class QuestDetailPage {
     this.getQuestRewards();    
   }
 
-  showLog(){
-    console.log(this.quest);
-  }
-
   getTableContents(table: string): any {  
       let firstSplit;
       if(table.includes("<table border='1' cellspacing='0' cellpadding='2'>")) firstSplit = table.split("<table border='1' cellspacing='0' cellpadding='2'>");

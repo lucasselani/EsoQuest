@@ -5,15 +5,13 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>QuestDetail</ion-title>
+    <ion-title>Quest</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content *ngIf="quest" padding>
+<ion-content *ngIf="quest" class="background" padding>
   <h2> {{quest.name}} ({{quest.repeatType}})</h2>
   <h5>
     <ion-icon name="pin"></ion-icon>
@@ -32,12 +30,11 @@
   <ion-list>
     <div *ngFor="let step of quest.steps">
       <ion-item text-wrap *ngIf="step.text">
-        <h3>
+        <h3 style="margin-top: 4px">
           {{step.stageIndex}}.{{step.stepIndex}}. {{step.overrideText}} at {{step.zone}}
         </h3>
         <p>{{step.text}}</p>
       </ion-item>
     </div>
   </ion-list>
-  <button ion-button (click)="showLog()">LOG </button>
 </ion-content>
