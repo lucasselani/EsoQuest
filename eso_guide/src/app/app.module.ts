@@ -11,6 +11,7 @@ import { AngularFireDatabaseProvider } from 'angularfire2/database';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { StreamPage } from '../pages/stream/stream';
 import { QuestlistPage } from '../pages/questlist/questlist';
 import { QuestDetailPage } from '../pages/quest-detail/quest-detail';
 import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
@@ -36,7 +37,8 @@ export const firebaseConfig = {
     MyApp,
     HomePage,
     QuestlistPage,
-    QuestDetailPage
+    QuestDetailPage,
+    StreamPage
   ],
   imports: [
     BrowserModule,
@@ -51,7 +53,8 @@ export const firebaseConfig = {
     MyApp,
     HomePage,
     QuestlistPage,
-    QuestDetailPage
+    QuestDetailPage,
+    StreamPage
   ],
   providers: [
     StatusBar,

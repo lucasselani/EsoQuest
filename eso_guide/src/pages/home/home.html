@@ -15,7 +15,7 @@
   <ion-spinner *ngIf="loading" id="feed-spinner"></ion-spinner>
   <ion-list class="spinner">
     <ion-item *ngFor="let item of articles" (click)="openArticle(item.link)" class="feed-article" no-lines>
-      <div class="article-title">{{item.title}}</div>
+      <div text-wrap class="article-title">{{item.title}}</div>
       <p [innerHtml]="item.description" style="color: white"></p>
     </ion-item>
   </ion-list>

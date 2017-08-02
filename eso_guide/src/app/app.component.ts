@@ -6,6 +6,7 @@ import { RestapiProvider } from '../providers/restapi/restapi';
 import { SqliteProvider } from '../providers/sqlite/sqlite';
 import { DataCentralProvider } from '../providers/data-central/data-central';
 import { HomePage } from '../pages/home/home';
+import { StreamPage } from '../pages/stream/stream';
 import { QuestItem } from '../model/questitem';
 import { QuestlistPage } from '../pages/questlist/questlist';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -32,7 +33,8 @@ export class MyApp {
     this.initializeApp();
     this.pages = [
       { title: 'News', component: HomePage },
-      { title: 'Quests', component: QuestlistPage }
+      { title: 'Quests', component: QuestlistPage },
+      { title: 'Streams', component: StreamPage }
     ];
   }
 

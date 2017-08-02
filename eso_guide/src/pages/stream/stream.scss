@@ -1,0 +1,30 @@
+page-stream {
+    .background {
+        background: url("../assets/background.jpg") no-repeat center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    .toolbar-background {
+         background-color: transparent;
+    }
+
+
+    #stream-spinner {
+        margin: auto;
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+        height: 100px;
+    }
+
+    .stream-title {
+      font-weight: bold;
+      color: white;
+    }
+
+    .stream-item {
+        background: rgba(0,0,0,0.7) !important;
+        border-bottom: 1px solid !important;
+        margin-bottom: 4px;
+    }
+}
