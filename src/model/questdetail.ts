@@ -27,5 +27,6 @@ export class Rewards {
     name:string;
     quantity:number;
     quality:string;
+    icon:string;
 }
 

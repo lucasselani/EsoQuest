@@ -6,12 +6,30 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { RestapiProvider } from '../providers/restapi/restapi';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseProvider } from 'angularfire2/database';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { QuestlistPage } from '../pages/questlist/questlist';
 import { QuestDetailPage } from '../pages/quest-detail/quest-detail';
 import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
+import { SQLite } from '@ionic-native/sqlite';
+import { SqliteProvider } from '../providers/sqlite/sqlite';
+import { AdMobPro } from '@ionic-native/admob-pro';
+import { FeedProvider } from '../providers/feed/feed';
+import { IonicStorageModule } from '@ionic/storage';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { DataCentralProvider } from '../providers/data-central/data-central';
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyAlmo_lK-gusHW-PSVnNSP5eUZC-4U7Wbs",
+  authDomain: "eso-guide.firebaseapp.com",
+  databaseURL: "https://eso-guide.firebaseio.com",
+  projectId: "eso-guide",
+  storageBucket: "",
+  messagingSenderId: "546420797302"
+};
 
 @NgModule({
   declarations: [
@@ -24,7 +42,9 @@ import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
     BrowserModule,
     HttpModule,
     AutoCompleteModule,
-    IonicModule.forRoot(MyApp)
+    IonicStorageModule.forRoot(),
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -37,8 +57,15 @@ import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
     StatusBar,
     SplashScreen,
     RestapiProvider,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AutoCompleteProvider
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    AutoCompleteProvider,
+    SQLite,
+    SqliteProvider,
+    AdMobPro,
+    FeedProvider,
+    InAppBrowser,
+    DataCentralProvider,
+    AngularFireDatabaseProvider
   ]
 })
-export class AppModule {}
+export class AppModule { }

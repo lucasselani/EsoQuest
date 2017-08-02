@@ -10,10 +10,10 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class RestapiProvider {
-  urlQuestList: string = "http://esoitem.uesp.net/viewlog.php?record=quest&start=";
-  urlQuestDetails: string = "http://esoitem.uesp.net/viewlog.php?action=view&record=quest&id="
-  urlQuestSteps: string = "http://esoitem.uesp.net/viewlog.php?record=questStep&filter=questId&filterid=";
-  urlQuestRewards: string = "http://esoitem.uesp.net/viewlog.php?record=questReward&filter=questId&filterid=";
+  private urlQuestList: string = "http://esoitem.uesp.net/viewlog.php?record=quest&start=";
+  private urlQuestDetails: string = "http://esoitem.uesp.net/viewlog.php?action=view&record=quest&id="
+  private urlQuestSteps: string = "http://esoitem.uesp.net/viewlog.php?record=questStep&filter=questId&filterid=";
+  private urlQuestRewards: string = "http://esoitem.uesp.net/viewlog.php?record=questReward&filter=questId&filterid=";
 
   constructor(public http: Http) {
     console.log('Hello RestapiProvider Provider');

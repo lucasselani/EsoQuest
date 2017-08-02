@@ -6,7 +6,10 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>{{pageName}}</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Quests</ion-title>
     <ion-buttons end (click)="showFilters()">
       <button ion-button icon-only>
         <ion-icon name="ios-funnel"></ion-icon>
@@ -15,10 +18,12 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding class="background">
+  <ion-auto-complete (search)="searchInQuestPage()" (itemSelected)="openQuestInSearchbar()"
+  [dataProvider]="autoComplete" #searchbar></ion-auto-complete>
+  <br><br>
   <ion-list>
-    <ion-item *ngFor="let quest of quests" (click)="openQuest(quest.id)"class="dark-list" no-lines>
+    <ion-item *ngFor="let quest of quests" (click)="openQuestInList(quest.id)" class="dark-list" no-lines>
       <div item-start>
         <h2 class="questlevel">Lv.</h2>
         <ion-avatar class="rounded-avatar">
@@ -34,7 +39,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="notSearching">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>

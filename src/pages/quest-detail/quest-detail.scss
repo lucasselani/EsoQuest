@@ -5,10 +5,7 @@ page-quest-detail {
         background-attachment: fixed;
     }
 
-    ion-title {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: start;
+    .toolbar-background {
+         background-color: transparent;
     }
 }

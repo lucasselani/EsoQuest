@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, AlertController, LoadingController, Events } from 'ionic-angular';
 import { QuestItem } from '../../model/questitem';
 import { QuestDetailPage } from '../quest-detail/quest-detail';
+import { DataCentralProvider } from '../../providers/data-central/data-central';
+import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
+import { AutoCompleteComponent } from 'ionic2-auto-complete';
+import { AdMobPro } from '@ionic-native/admob-pro';
 
 /**
  * Generated class for the QuestlistPage page.
@@ -9,36 +13,91 @@ import { QuestDetailPage } from '../quest-detail/quest-detail';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+const SCROLL_SIZE = 20;
 
 @Component({
   selector: 'page-questlist',
   templateUrl: 'questlist.html',
 })
 export class QuestlistPage {
+  @ViewChild('searchbar')
+  searchbar: AutoCompleteComponent;
   quests: Array<QuestItem>;
   allQuests: Array<QuestItem>;
   itemsShown: number = 0;
   loading: any = null;
   alert: any = null;
   pageName: string = "All Quests";
+  notSearching: boolean = true;
+  admobid = {
+    banner: 'ca-app-pub-8213289176081397/8308163618',
+    interstitial: 'ca-app-pub-8213289176081397/6078065024'
+  };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private alertController: AlertController, private loadingCtrl: LoadingController) {
-    this.allQuests = navParams.data.quests;
-    this.quests = new Array<QuestItem>();
-    this.quests.push(...this.allQuests.slice(0,100));
-    this.itemsShown += 100;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public admob: AdMobPro,
+    private alertController: AlertController, private loadingCtrl: LoadingController,
+    public dataCentral: DataCentralProvider, public autoComplete: AutoCompleteProvider) {
+    this.prepareAdMob();
+    this.dataCentral.getQuestList().then((questList) => {
+      this.allQuests = questList;
+      this.autoComplete.setDataProvider(this.allQuests, "name", "sliceStringAndCompare");
+      console.log(`quests got, size: ${questList.length}`);
+      this.quests = new Array<QuestItem>();
+      this.quests.push(...this.allQuests.slice(0, SCROLL_SIZE));
+      this.itemsShown += SCROLL_SIZE;
+    });
+  }
 
-    if(navParams.data.keyword != null){
-      this.pageName = 'Search for "' + navParams.data.keyword + '"';
-    } 
+  prepareAdMob() {
+    this.admob.createBanner({
+      adId: this.admobid.banner,
+      position: this.admob.AD_POSITION.BOTTOM_CENTER,
+      autoShow: true,
+      isTesting: true
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad QuestlistPage');
   }
 
-  openQuest(id: number) {
+  openQuestInList(id: number) {
     this.navCtrl.push(QuestDetailPage, id);
+  }
+
+  openQuestInSearchbar() {
+    let name = this.searchbar.getValue();
+    this.searchbar.clearValue();
+    this.quests.forEach(item => {
+      if (item.name == name) this.navCtrl.push(QuestDetailPage, item.id);
+    });
+  }
+
+  searchInQuestPage() {
+    let keyword = this.searchbar.keyword;
+    if (keyword == "") {
+      this.pageName = "Quests";
+      this.quests.push(...this.allQuests.slice(0, SCROLL_SIZE));
+      this.itemsShown += SCROLL_SIZE;
+      this.notSearching = true;
+      return;
+    } else if (keyword.trim() == "") return;
+
+    keyword = keyword.trim();
+    let results: Array<QuestItem> = new Array<QuestItem>();
+    this.allQuests.forEach(item => {
+      if (item.name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())) results.push(item);
+    });
+
+    if (results.length == 0) {
+      alert("No results found.");
+      this.searchbar.clearValue();
+    } else {
+      this.itemsShown = 0;
+      this.notSearching = false;
+      this.pageName = `Search for "${keyword}"`;
+      this.quests = results;
+    }
   }
 
   showFilters() {
@@ -55,8 +114,8 @@ export class QuestlistPage {
         },
         {
           text: 'Sort',
-          handler: data => {                 
-            this.filterList(data);     
+          handler: data => {
+            this.filterList(data);
           }
         }
       ],
@@ -84,46 +143,51 @@ export class QuestlistPage {
   filterList(data: string) {
     this.configureLoadingDefault();
     this.loading.present().then(() => {
-      if (data == 'level') {
-        this.quests.sort(function (a, b) {
-          if (a.level < b.level) return -1;
-          if (a.level > b.level) return 1;
-          return 0;
-        })
-      } else if (data == 'name') {
-        this.quests.sort(function (a, b) {
-          if (a.name < b.name) return -1;
-          if (a.name > b.name) return 1;
-          return 0;
-        })
-      } else {
-        this.quests.sort(function (a, b) {
-          if (a.zone < b.zone) return -1;
-          if (a.zone > b.zone) return 1;
-          return 0;
-        })
-      }     
-      
-      if(this.loading != null){
+      this.allQuests.sort(this.sortListByParameter(data));
+      this.quests.sort(this.sortListByParameter(data));
+      if (this.loading != null) {
         this.loading.dismiss().then(() => {
           this.alert.dismiss();
           this.alert = null;
-        });  
+        });
         this.loading = null;
       }
-    });  
+    });
+  }
+
+  sortListByParameter(data) {
+    if (data == 'level') {
+      return (a, b) => {
+        if (a.level < b.level) return -1;
+        if (a.level > b.level) return 1;
+        return 0;
+      }
+    } else if (data == 'name') {
+      return (a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      }
+    } else if (data == 'zone') {
+      return (a, b) => {
+        if (a.zone < b.zone) return -1;
+        if (a.zone > b.zone) return 1;
+        return 0;
+      }
+    }
   }
 
   configureLoadingDefault() {
-    if(this.loading == null)
+    if (this.loading == null)
       this.loading = this.loadingCtrl.create({
         content: 'Please wait...'
       });
   }
 
-  doInfinite(event){
-    this.quests.push(...this.allQuests.slice(this.itemsShown,this.itemsShown+100));
-    this.itemsShown += 100;
+  doInfinite(event) {
+    if (!this.notSearching) return;
+    this.quests.push(...this.allQuests.slice(this.itemsShown, this.itemsShown + SCROLL_SIZE));
+    this.itemsShown += SCROLL_SIZE;
     event.complete();
   }
 

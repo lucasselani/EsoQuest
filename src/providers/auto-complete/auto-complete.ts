@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { QuestItem } from '../../model/questitem';
 
 /*
@@ -11,20 +9,48 @@ import { QuestItem } from '../../model/questitem';
 */
 @Injectable()
 export class AutoCompleteProvider {
-  private questList:Array<QuestItem>;
-  labelAttribute = "name";
+  private data = [];
+  private filterMethod: string;
+  labelAttribute = "";
 
-  constructor(public http: Http) {
-    this.questList = new Array<QuestItem>();
-    console.log('Hello AutoCompleteProvider Provider');
+
+  constructor() { }
+
+  setDataProvider(data, label, filter) {
+    this.data = data;
+    this.labelAttribute = label;
+    this.filterMethod = filter;
   }
 
-  setQuestList(quests) {
-    this.questList = quests;
+  getResults(keyword: string) {
+    let filterArray = this.filterMethods[this.filterMethod];
+    let data = filterArray(keyword.toLocaleLowerCase());
+    return data;
   }
 
-  getResults(keyword:string) {
-    return this.questList.filter(quest => quest.name.toLowerCase().startsWith(keyword));
+  filterMethods = {
+    "sliceStringAndCompare": (keyword: string) => {
+      let results = [];
+      let result = (keyword: string, stringToSlice: string) => {
+        stringToSlice = stringToSlice.slice(0, keyword.length).toLocaleLowerCase();
+        if (stringToSlice < keyword) return -1;
+        if (stringToSlice > keyword) return 1;
+        return 0;
+      }
+
+      for (let i = 0; i < this.data.length; i++) {
+        if (result(keyword, this.data[i][this.labelAttribute]) == 0) results.push(this.data[i]);
+        else if (result(keyword, this.data[i][this.labelAttribute]) == 1) break;
+      }
+      return results;
+    },
+    "includesKeyword": (keyword: string) => {
+      let results = [];
+      this.data.forEach(item => {
+        if(item[this.labelAttribute].toLocaleLowerCase().includes(keyword)) results.push(item);
+      });
+      return results;
+    }
   }
 
 }

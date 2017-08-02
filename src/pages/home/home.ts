@@ -1,13 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
-import { QuestItem } from '../../model/questitem';
+import { NavController } from 'ionic-angular';
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
-import { QuestlistPage } from '../questlist/questlist';
-import { QuestDetailPage } from '../quest-detail/quest-detail';
 import { AutoCompleteComponent } from 'ionic2-auto-complete';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { RestapiProvider } from '../../providers/restapi/restapi';
-
+import { AdMobPro } from '@ionic-native/admob-pro';
+import { FeedProvider, FeedItem } from '../../providers/feed/feed';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @Component({
   selector: 'page-home',
@@ -16,48 +14,81 @@ import { RestapiProvider } from '../../providers/restapi/restapi';
 export class HomePage {
   @ViewChild('searchbar')
   searchbar: AutoCompleteComponent;
-  quests: Array<QuestItem>;
+  loading: boolean = false;
+  pageName: string = "News";
+  allArticles: Array<FeedItem>;
+  articles: Array<FeedItem>;
+  esoRssFeedUrl: string = "http://files.elderscrollsonline.com/rss/en-us/eso-rss.xml";
+  admobid = {
+    banner: 'ca-app-pub-8213289176081397/8308163618',
+    interstitial: 'ca-app-pub-8213289176081397/6078065024'
+  };
 
-  constructor(public navCtrl: NavController, public autoComplete: AutoCompleteProvider, public events: Events, public splashScreen: SplashScreen, restapi:RestapiProvider) {
-    events.subscribe('questListReady', (quests) => {
-      this.quests = quests;
-      
+  constructor(public navCtrl: NavController, public autoComplete: AutoCompleteProvider,
+    public splashScreen: SplashScreen, public admob: AdMobPro,
+    public feedProvider: FeedProvider, public iab: InAppBrowser) {
+
+    this.loadArticles()
+    this.prepareAdMob();
+  }
+
+  openItem() {
+    let title = this.searchbar.getValue();
+    this.searchbar.clearValue();
+    this.articles.forEach(item => {
+      if (item.title == title) this.openArticle(item.link);
     });
-    let questsJSON = restapi.getQuestsFromFile();
-    console.log(JSON.stringify(questsJSON));
-
   }
 
-  openQuestList(){
-    let opts = {
-      quests: this.quests,
-      keyword: null
+  searchItems() {
+    let keyword = this.searchbar.keyword;
+    if (keyword == "") {
+      this.pageName = "News";
+      this.articles = this.allArticles;
+      return;
+    } else if(keyword.trim() == "") return;
+
+    keyword = keyword.trim();
+    let results: Array<FeedItem> = new Array<FeedItem>();
+    this.allArticles.forEach(item => {
+      if (item.title.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())) results.push(item);
+    });
+
+    if (results.length == 0) {
+      alert("No results found.");
+      this.searchbar.clearValue();
+    } else {
+      this.pageName = `Search for "${keyword}"`;
+      this.articles = results;
     }
-    this.navCtrl.push(QuestlistPage, opts);
   }
 
-  openItem(){
-    let name = this.searchbar.getValue();
-    this.searchbar.clearValue();
-    this.quests.forEach(item => {
-      if(item.name == name) this.navCtrl.push(QuestDetailPage, item.id);
-    });    
-  }
-
-  openItems(){
-    if(this.searchbar.keyword.trim() == "") return;
-    else if(this.searchbar.suggestions.length == 0) alert("No results found.");
-    let opts = {
-      quests: this.searchbar.suggestions,
-      keyword: this.searchbar.keyword
-    }
-    this.searchbar.clearValue();
-    this.navCtrl.push(QuestlistPage, opts);
+  prepareAdMob() {
+    this.admob.createBanner({
+      adId: this.admobid.banner,
+      position: this.admob.AD_POSITION.BOTTOM_CENTER,
+      autoShow: true,
+      isTesting: true
+    });
   }
 
   ionViewDidLoad() {
     setTimeout(() => {
       this.splashScreen.hide();
-    },1000);    
+    }, 1000);
+  }
+
+  public openArticle(url: string) {
+    this.iab.create(url, '_blank');
+  }
+
+  loadArticles() {
+    this.loading = true;
+    this.feedProvider.getArticlesForUrl(this.esoRssFeedUrl).subscribe(res => {
+      this.articles = res;
+      this.allArticles = res;
+      this.loading = false;
+      this.autoComplete.setDataProvider(this.allArticles, "title", "includesKeyword");
+    });
   }
 }

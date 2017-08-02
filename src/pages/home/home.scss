@@ -5,34 +5,26 @@ page-home {
         background-attachment: fixed;
     }
 
-    ion-title {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: start;
+    .toolbar-background {
+         background-color: transparent;
     }
 
-    label.app-name {
-        display: block;
-        float: left;
-        margin-top: 8px;
-        margin-left: 8px;
+
+    #feed-spinner {
+        margin: auto;
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+        height: 100px;
     }
 
-    .eso-icon {
-        display: block;
-        float: left;
-        width: 32px;
-        height: 32px;
-        margin-top: 4px;
+    .article-title {
+      font-weight: bold;
+      color: white;
+    }
+
+    .feed-article {
+        background: rgba(0,0,0,0.7) !important;
+        border-bottom: 1px solid !important;
         margin-bottom: 4px;
-    }
-
-    .no-scroll {
-         overflow: hidden;
-    }
-
-    ::-webkit-scrollbar{
-        display:none;
     }
 }
