@@ -1,14 +1,18 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      ESO Service
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-list>
+    <ion-item (click)="fetchQuestList()">FETCH QUEST LIST</ion-item>
+    <ion-item (click)="fetchQuestsDetail()">FETCH QUESTS DETAIL</ion-item>
+    <ion-item (click)="questListToFirebase()">QUEST LIST TO FIREBASE</ion-item>
+    <ion-item (click)="questsDetailToFirebase()">QUESTS DETAIL TO FIREBASE</ion-item>
+    <ion-item (click)="logQuestList()">LOG QUEST LIST</ion-item>
+    <ion-item (click)="logQuestDetail()">LOG QUESTS DETAIL</ion-item>
+  </ion-list>
 </ion-content>
