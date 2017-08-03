@@ -7,12 +7,17 @@
 </ion-header>
 
 <ion-content padding>
+  <h1>QUEST LIST</h1>
   <ion-list>
     <ion-item (click)="fetchQuestList()">FETCH QUEST LIST</ion-item>
-    <ion-item (click)="fetchQuestsDetail()">FETCH QUESTS DETAIL</ion-item>
     <ion-item (click)="questListToFirebase()">QUEST LIST TO FIREBASE</ion-item>
-    <ion-item (click)="questsDetailToFirebase()">QUESTS DETAIL TO FIREBASE</ion-item>
     <ion-item (click)="logQuestList()">LOG QUEST LIST</ion-item>
+  </ion-list>
+  <h1>QUEST DETAIL</h1>
+  <ion-list>
+    <ion-item (click)="fetchQuestsDetail()">FETCH QUESTS DETAIL</ion-item>
+    <ion-item (click)="questsDetailToFirebase()">QUESTS DETAIL TO FIREBASE</ion-item>
+    <ion-item (click)="fetchAndPushQuestsDetail()">FETCH AND PUSH FIREBASE</ion-item>
     <ion-item (click)="logQuestDetail()">LOG QUESTS DETAIL</ion-item>
   </ion-list>
 </ion-content>

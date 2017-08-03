@@ -15,6 +15,7 @@ export class HomePage {
   questListArray: Array<QuestItem>;
   firebaseQuestListArray: FirebaseListObservable<any[]>;
   loading: Loading;
+  upload: boolean = false;
 
   constructor(public navCtrl: NavController, public restapi: RestapiProvider,
     public loadingCtrl: LoadingController, public db: AngularFireDatabase) {
@@ -25,15 +26,24 @@ export class HomePage {
   //--------------------------------------- QUEST DETAIL METHODS ---------------------------------------------//
 
   fetchQuestsDetail() {
+    if (this.questListArray.length == 0) {
+      alert('Fetch quests first');
+      return;
+    }
     this.configureLoadingDefault();
     this.loading.present().then(() => {
       this.getQuestsDetailsRecursive(0);
     });
   }
 
+  fetchAndPushQuestsDetail() {
+    this.fetchQuestsDetail();
+    this.upload = true;
+  }
+
   questsDetailToFirebase() {
-    if (this.questDetailArray.length == 0) {
-      alert('Fetch quest detail first');
+    if (this.questDetailArray.length == 0 || this.questListArray.length == 0) {
+      alert('Fetch quests first');
       return;
     }
     this.configureLoadingDefault();
@@ -86,6 +96,11 @@ export class HomePage {
           else {
             this.loading.dismiss();
             this.loading = null;
+            if (this.upload) {
+              this.questsDetailToFirebase();
+              this.upload = false;
+              console.log("uploading");
+            }
           }
         })
       })
