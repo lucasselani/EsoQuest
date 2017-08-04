@@ -7,6 +7,18 @@
 </ion-header>
 
 <ion-content padding>
+  <h1>SET SUMMARIES</h1>
+  <ion-list>
+    <ion-item (click)="fetchSetSummaries()">FETCH SET SUMMARIES</ion-item>
+    <ion-item (click)="setSummariesToFirebase()">SET SUMMARIES TO FIREBASE</ion-item>
+    <ion-item (click)="logSetSummaries()">LOG SET SUMMARIES</ion-item>
+  </ion-list>
+  <h1>ITEM SUMMARIES</h1>
+  <ion-list>
+    <ion-item (click)="fetchItemSummaries()">FETCH ITEM SUMMARIES</ion-item>
+    <ion-item (click)="itemSummariesToFirebase()">ITEM SUMMARIES TO FIREBASE</ion-item>
+    <ion-item (click)="logItemSummaries()">LOG ITEM SUMMARIES</ion-item>
+  </ion-list>
   <h1>QUEST LIST</h1>
   <ion-list>
     <ion-item (click)="fetchQuestList()">FETCH QUEST LIST</ion-item>
