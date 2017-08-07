@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController, Loading } from 'ionic-angular';
 import { RestapiProvider } from '../../providers/restapi/restapi';
 import { QuestDetail, QuestItem, Rewards, Steps } from '../../model/quest';
-import { DataTable, ItemSummary, SetSummary } from '../../model/set';
+import { ItemSummary, SetSummary } from '../../model/set';
+import { Skill, SkillItem } from '../../model/skill';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component({
@@ -18,8 +19,10 @@ export class HomePage {
   firebaseSetSummariesArray: FirebaseListObservable<any[]>;
   itemSummariesArray: Array<Array<ItemSummary>>;
   firebaseItemSummariesArray: FirebaseListObservable<any[]>;
-  dataTableArray: Array<Array<DataTable>>;
-  firebaseDataTableArray: FirebaseListObservable<any[]>;
+  skillsArray: Array<Skill>;
+  firebaseSkillsArray: FirebaseListObservable<any[]>;
+  skillListArray: Array<SkillItem>;
+  firebaseSkillListArray: FirebaseListObservable<any[]>;
   loading: Loading;
   upload: boolean = false;
 
@@ -29,7 +32,8 @@ export class HomePage {
     this.questDetailArray = new Array<QuestDetail>();
     this.setSummariesArray = new Array<SetSummary>();
     this.itemSummariesArray = new Array<Array<ItemSummary>>();
-    this.dataTableArray = new Array<Array<DataTable>>();
+    this.skillsArray = new Array<Skill>();
+    this.skillListArray = new Array<SkillItem>();
   }
 
   //--------------------------------------- QUEST DETAIL METHODS ---------------------------------------------//
@@ -226,14 +230,8 @@ export class HomePage {
           this.uploadQuestList(i + 1);
         }
       }).catch((err) => {
-        if (i == this.questListArray.length - 1) {
-          this.loading.dismiss();
-          this.loading = null;
-          return;
-        } else {
-          console.log(`error to push to firebase: ${err}`);
-          this.uploadQuestList(i + 1);
-        }
+        console.log(`error to push to firebase: ${err}`);
+        this.uploadQuestList(i);
       });
   }
 
@@ -307,14 +305,8 @@ export class HomePage {
           this.uploadSetSummaries(i + 1);
         }
       }).catch((err) => {
-        if (i == this.setSummariesArray.length - 1) {
-          this.loading.dismiss();
-          this.loading = null;
-          return;
-        } else {
-          console.log(`error to push to firebase: ${err}`);
-          this.uploadSetSummaries(i + 1);
-        }
+        console.log(`error to push to firebase: ${err}`);
+        this.uploadSetSummaries(i);
       });
   }
 
@@ -366,7 +358,10 @@ export class HomePage {
       if (index < this.setSummariesArray.length - 1) this.getItemSummariesPerSet(index + 1);
       else {
         console.log(this.setSummariesArray);
-        this.getDataTable(0, 0);
+        //this.getDataTable(0, 0);
+        this.loading.dismiss();
+        this.loading = null;
+        return;
       }
     });
   }
@@ -388,12 +383,31 @@ export class HomePage {
       itemSummary.description = rows[i].cells[5].textContent;
       itemSummary.style = rows[i].cells[8].textContent;
       itemSummary.trait = rows[i].cells[9].textContent;
+      itemSummary.value = rows[i].cells[10].textContent;
+      itemSummary.level = rows[i].cells[11].textContent;
+      itemSummary.quality = rows[i].cells[12].textContent;
       itemSummary.type = rows[i].cells[13].textContent;
       itemSummary.specialType = rows[i].cells[14].textContent;
       itemSummary.equipType = rows[i].cells[15].textContent;
       itemSummary.weaponType = rows[i].cells[16].textContent;
       itemSummary.armorType = rows[i].cells[17].textContent;
       itemSummary.craftType = rows[i].cells[18].textContent;
+      itemSummary.armorRating = rows[i].cells[19].textContent;
+      itemSummary.weaponPower = rows[i].cells[20].textContent;
+      itemSummary.enchantName = rows[i].cells[21].textContent;
+      itemSummary.enchantDesc = rows[i].cells[22].textContent;
+      itemSummary.abilityName = rows[i].cells[23].textContent;
+      itemSummary.abilityDesc = rows[i].cells[24].textContent;
+      itemSummary.setName = rows[i].cells[25].textContent;
+      itemSummary.setBonusDesc1 = rows[i].cells[26].textContent;
+      itemSummary.setBonusDesc2 = rows[i].cells[27].textContent;
+      itemSummary.setBonusDesc3 = rows[i].cells[28].textContent;
+      itemSummary.setBonusDesc4 = rows[i].cells[29].textContent;
+      itemSummary.setBonusDesc5 = rows[i].cells[30].textContent;
+      itemSummary.bindType = rows[i].cells[31].textContent;
+      itemSummary.traitDesc = rows[i].cells[32].textContent;
+      itemSummary.traitAbilityDesc = rows[i].cells[33].textContent;
+
       itemSummary.setId = this.setSummariesArray[index].id;
       summaryArray.push(itemSummary);
     }
@@ -414,15 +428,18 @@ export class HomePage {
 
   uploadItemSummariesPerSet(i) {
     if (i < this.setSummariesArray.length - 1) {
-      this.dataTableToFirebase();
-    } else {
+      //this.dataTableToFirebase();
       this.firebaseItemSummariesArray = this.db.list(`/item-summary/${this.setSummariesArray[i].id}`);
       this.uploadItemSummaries(i, 0);
+      return;
+    } else {
+      this.loading.dismiss();
+      this.loading = null;
     }
   }
 
   uploadItemSummaries(i, j) {
-    this.firebaseItemSummariesArray.update(this.itemSummariesArray[i][j].id + "", this.itemSummariesArray[i][j])
+    this.firebaseItemSummariesArray.update(this.itemSummariesArray[i][j].itemId + "", this.itemSummariesArray[i][j])
       .then(() => {
         if (j == this.itemSummariesArray[i].length - 1) {
           this.uploadItemSummariesPerSet(i + 1);
@@ -431,12 +448,8 @@ export class HomePage {
           this.uploadItemSummaries(i, j + 1);
         }
       }).catch((err) => {
-        if (j == this.itemSummariesArray[i].length - 1) {
-          this.uploadItemSummariesPerSet(i + 1);
-        } else {
-          console.log(`error to push to firebase: ${err}`);
-          this.uploadItemSummaries(i, j + 1);
-        }
+        console.log(`error to push to firebase: ${err}`);
+        this.uploadItemSummaries(i, j);
       });
   }
 
@@ -447,115 +460,105 @@ export class HomePage {
     }
     console.log("ITEM SUMMARY");
     console.log(this.itemSummariesArray);
-    this.logDataTable();
   }
 
-  getDataTable(setIndex, itemIndex) {
-    return this.restapi.getDataTable(this.itemSummariesArray[setIndex][itemIndex].itemId).then(data => {
-      if (setIndex < this.itemSummariesArray.length - 1)
-        this.dataTableTableToJSON(this.getTableContents(data._body), setIndex, itemIndex);
-      else {
-        this.loading.dismiss();
-        this.loading = null;
-        return;
-      };
+  // ---------------------------------------- SKILL DETAIL AND SKILL LIST --------------------------------------------------
+  fetchSkills() {
+    this.configureLoadingDefault();
+    this.loading.present().then(() => {
+      this.getSkillsDetail(0);
     });
   }
 
-  dataTableTableToJSON(table, setIndex, itemIndex) {
-    let rows = table.rows;
-    let dataTableArray = new Array<DataTable>();
-    for (let i = 1; i < rows.length; i++) {
-      let dataTable = new DataTable();
-      let cellValue: number = 6;
-      try {
-        if (this.itemSummariesArray[setIndex][itemIndex].specialType == "Armor" ||
-          this.itemSummariesArray[setIndex][itemIndex].weaponType == "Shield") {
-          dataTable.armorRating = rows[i].cells[3].textContent;
-          dataTable.enchantName = rows[i].cells[4].textContent;
-          dataTable.enchantDesc = rows[i].cells[5].textContent;
-        } else if (this.itemSummariesArray[setIndex][itemIndex].specialType == "Weapon") {
-          dataTable.weaponPower = rows[i].cells[3].textContent;
-          dataTable.enchantDesc = rows[i].cells[4].textContent;
-          dataTable.maxCharges = rows[i].cells[5].textContent;
-        } else if (this.itemSummariesArray[setIndex][itemIndex].specialType == "Container") {
-          dataTable.weaponPower = rows[i].cells[3].textContent;
-          dataTable.armorRating = rows[i].cells[4].textContent;
-          dataTable.maxCharges = rows[i].cells[5].textContent;
-        } else if (this.itemSummariesArray[setIndex][itemIndex].equipType == "Ring" ||
-          this.itemSummariesArray[setIndex][itemIndex].equipType == "Neck") {
-          dataTable.enchantName = rows[i].cells[3].textContent;
-          dataTable.enchantDesc = rows[i].cells[4].textContent;
-          cellValue--;
-        } else continue;
-
-        dataTable.itemId = this.itemSummariesArray[setIndex][itemIndex].itemId;
-        dataTable.level = rows[i].cells[0].textContent;
-        dataTable.quality = rows[i].cells[1].textContent;
-        dataTable.value = rows[i].cells[2].textContent;
-
-        dataTable.traitDesc = rows[i].cells[cellValue++].textContent;
-        dataTable.setBonusDesc1 = rows[i].cells[cellValue++].textContent;
-        dataTable.setBonusDesc2 = rows[i].cells[cellValue++].textContent;
-        dataTable.setBonusDesc3 = rows[i].cells[cellValue++].textContent;
-        dataTable.setBonusDesc4 = rows[i].cells[cellValue++].textContent;
-        dataTable.internalLevel = rows[i].cells[cellValue++].textContent;
-        dataTable.internalSubtype = rows[i].cells[cellValue++].textContent;
-      } catch (err) {
-        console.log("error: " + err);
-        console.log("row: " + rows[i]);
-
-      } finally {
-        dataTableArray.push(dataTable);
-      }
-    }
-    this.dataTableArray.push(dataTableArray);
-    if (itemIndex < this.itemSummariesArray[setIndex].length - 1) this.getDataTable(setIndex, itemIndex + 1);
-    else this.getDataTable(setIndex + 1, 0);
-  }
-
-  dataTableToFirebase() {
-    if (this.dataTableArray.length == 0) {
-      alert('Fetch dataTableArray first');
+  skillsDetailToFirebase() {
+    if (this.skillsArray.length == 0) {
+      alert('Fetch skillsArray first');
       return;
     }
-    this.uploadItemSummariesPerItem(0, 0);
+    this.configureLoadingDefault();
+    this.loading.present().then(() => {
+      this.firebaseSkillsArray = this.db.list('/skills-detail');
+      this.uploadSkillsDetail(0);
+    });
   }
 
-  uploadItemSummariesPerItem(itemIndex, itemValue) {
-    if (itemIndex < this.dataTableArray.length - 1) {
+  uploadSkillsDetail(i) {
+    this.firebaseSkillsArray.update(`${this.skillsArray[i].baseName}/${this.skillsArray[i].abilityId}`, this.skillsArray[i])
+      .then(() => {
+        if (i == this.skillsArray.length - 1) {
+          this.loading.dismiss();
+          this.loading = null;
+          return;
+        } else {
+          console.log(`push skill: ${this.skillsArray[i].name} to firebase successfull`);
+          this.uploadSkillsDetail(i + 1);
+        }
+      }).catch((err) => {
+        console.log(`error to push to firebase: ${err}`);
+        this.uploadSkillsDetail(i);
+      });
+  }
+
+  logSkillsDetail() {
+    if (this.skillsArray.length == 0) {
+      alert('Fetch skillsArray first');
+      return;
+    }
+    console.log(this.skillsArray);
+  }
+
+  private getSkillsDetail(skillValue) {
+    return this.restapi.getSkills(skillValue).then(data => {
+      return this.skillListTableToJSON(this.getTableContents(data._body), skillValue);
+    });
+  }
+
+  private skillListTableToJSON(table, skillValue) {
+    let rows = table.rows;
+    for (let i = 1; i < rows.length; i++) {
+      let skill = new Skill();
+      skill.id = rows[i].cells[1].textContent;
+      skill.abilityId = rows[i].cells[2].textContent;
+      try {
+        let iconInfo: string = rows[i].cells[3].innerHTML;
+        iconInfo = iconInfo.split('title="')[1].split(".dds")[0];
+        skill.icon = iconInfo + ".png";
+      } catch (err) {
+        skill.icon = "";
+        console.log(err);
+      }
+
+      try {
+        let skillInfo: string = rows[i].cells[4].textContent;
+        let skillInfoArray = skillInfo.split("::");
+        if (skillInfoArray.length == 1) {
+          skillInfoArray = skillInfo.split(":");
+        }
+        skill.className = skillInfoArray[0];
+        skill.skillLineName = skillInfoArray[1];
+      } catch (err) {
+        console.log(err);
+      }
+      skill.baseName = rows[i].cells[5].textContent;
+      skill.name = rows[i].cells[6].textContent;
+      skill.learnedLevel = rows[i].cells[7].textContent;
+      skill.rank = rows[i].cells[8].textContent;
+      skill.maxRank = rows[i].cells[9].textContent;
+      skill.type = rows[i].cells[10].textContent;
+      skill.cost = rows[i].cells[11].textContent;
+      skill.skillIndex = rows[i].cells[12].textContent;
+      skill.description = rows[i].cells[13].textContent;
+      this.skillsArray.push(skill);
+    }
+
+    if (rows.length == 301) {
+      skillValue += 300;
+      this.getSkillsDetail(skillValue);
+    } else {
       this.loading.dismiss();
       this.loading = null;
-    } else {
-      this.firebaseItemSummariesArray = this.db.list(`/data-table/`);
-      this.firebaseItemSummariesArray.update(`${this.dataTableArray[itemIndex][itemValue].itemId}` + "", this.dataTableArray[itemIndex][itemValue])
-        .then(() => {
-          if (itemValue == this.dataTableArray[itemIndex].length - 1) {
-            this.uploadItemSummariesPerItem(itemIndex + 1, 0);
-          } else {
-            console.log(`push data table: ${this.dataTableArray[itemIndex][itemValue].itemId} to firebase successfull`);
-            this.uploadItemSummariesPerItem(itemIndex, itemValue + 1);
-          }
-        }).catch((err) => {
-          if (itemValue == this.dataTableArray[itemIndex].length - 1) {
-            this.uploadItemSummariesPerItem(itemIndex + 1, 0);
-          } else {
-            console.log(`error to push to firebase: ${err}`);
-            this.uploadItemSummariesPerItem(itemIndex, itemValue + 1);
-          }
-        });
     }
   }
-
-  logDataTable() {
-    if (this.dataTableArray.length == 0) {
-      alert('Fetch dataTableArray first');
-      return;
-    }
-    console.log("DATA TABLE");
-    console.log(this.dataTableArray);
-  }
-
 
   // --------------------------------------------- UTILS ---------------------------------------------
 
@@ -565,6 +568,8 @@ export class HomePage {
       firstSplit = table.split("<table border='1' cellspacing='0' cellpadding='2'>");
     else if (table.includes("<table border='1' cellpadding='0' cellspacing='0' class='esodmi_table'>"))
       firstSplit = table.split("<table border='1' cellpadding='0' cellspacing='0' class='esodmi_table'>");
+    else if (table.includes('<table id="esoil_rawdatatable" cellpadding="0" cellspacing="0" border="0">'))
+      firstSplit = table.split('<table id="esoil_rawdatatable" cellpadding="0" cellspacing="0" border="0">');
     else firstSplit = table.split("<table border='1' cellpadding='2' cellspacing='0'>");
     let secondSplit = firstSplit[1].split("</table>");
 

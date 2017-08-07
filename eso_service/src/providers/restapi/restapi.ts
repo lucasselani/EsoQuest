@@ -18,9 +18,16 @@ export class RestapiProvider {
   private urlItemSummary: string = "http://esoitem.uesp.net/itemLink.php?summary&itemid=";
   private urlDataTable: string = "http://esoitem.uesp.net/dumpMinedItems.php?output=html&itemid="
   private urlItemDataImage: string = "http://esoitem.uesp.net/itemLinkImage.php?level=1-CP160&quality=0-5&summary&itemid=";
+  private urlSkillList: string = "http://esoitem.uesp.net/viewlog.php?record=skillTree&start="
 
   constructor(public http: Http) {
     console.log('Hello RestapiProvider Provider');
+  }
+
+  public getSkills(itemValue: number): Promise<any> {
+    return new Promise(resolve => {
+      this.http.get(this.urlSkillList + itemValue).subscribe(data => resolve(data));
+    });
   }
 
   public getQuests(itemValue: number): Promise<any> {

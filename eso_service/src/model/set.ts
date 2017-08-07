@@ -16,7 +16,7 @@ export class SetSummary {
 export class ItemSummary {
     // TABLE DATA
     id: number;
-    itemId: number;     
+    itemId: number;
     name: string;
     icon: string;
     description: string;
@@ -30,26 +30,24 @@ export class ItemSummary {
     craftType: string;
     // APP DATA
     setId: number;
-    dataTable: DataTable[];
-}
-
-export class DataTable {
-    // TABLE DATA
-    level: number;
+    setName:string;
+    // RAW DATA
+    level: string;
     quality: string;
-    value: number
-    weaponPower: number;
-    armorRating: number;
+    value: string;
+    weaponPower: string;
+    armorRating: string;
     enchantDesc: string;
     enchantName: string;
-    maxCharges: number;
+    abilityDesc: string;
+    abilityName: string;
+    maxCharges: string;
     traitDesc: string;
+    traitAbilityDesc: string;
     setBonusDesc1: string;
     setBonusDesc2: string;
     setBonusDesc3: string;
     setBonusDesc4: string;
-    internalLevel: number;
-    internalSubtype: number;
-    // APP DATA
-    itemId: number;
+    setBonusDesc5: string;
+    bindType: string;
 }
