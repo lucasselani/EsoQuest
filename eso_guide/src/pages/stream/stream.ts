@@ -78,7 +78,7 @@ export class StreamPage {
   }
 
   public openStream(url: string) {
-    this.iab.create(url, '_blank');
+    this.iab.create(url, '_system');
   }
 
   prepareAdMob() {

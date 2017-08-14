@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { QuestItem } from '../../model/questitem';
+import { QuestItem } from '../../model/quest';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { commands } from './commands';
 

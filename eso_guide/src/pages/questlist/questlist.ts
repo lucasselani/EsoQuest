@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Events } from 'ionic-angular';
-import { QuestItem } from '../../model/questitem';
+import { QuestItem } from '../../model/quest';
 import { QuestDetailPage } from '../quest-detail/quest-detail';
 import { DataCentralProvider } from '../../providers/data-central/data-central';
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';

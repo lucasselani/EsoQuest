@@ -10,6 +10,13 @@ export class QuestDetail {
     rewards:Rewards[];
 }
 
+export class QuestItem {
+  id: number;
+  zone: number;
+  level: number;
+  name: string;
+}
+
 export class Steps {
     id:number;
     zone:string;

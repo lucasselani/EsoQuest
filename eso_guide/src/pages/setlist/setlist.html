@@ -1,0 +1,35 @@
+<!--
+  Generated template for the SetlistPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Sets</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="background">
+  <ion-auto-complete (search)="searchInSetsPage()" (itemSelected)="openSetInSearchbar()"
+  [dataProvider]="autoComplete" #searchbar></ion-auto-complete>
+  <br><br>
+  <ion-list>
+    <ion-item *ngFor="let set of sets" (click)="openSetInList(set.id)" class="dark-list" no-lines text-wrap>
+      <h2 style="color: white; font-weight: bold; ">{{set.name}}</h2>
+      <p style="color: #eeeeee;" *ngIf="set.bonusDesc1"> {{set.bonusDesc1}}</p>
+      <p style="color: #eeeeee;" *ngIf="set.bonusDesc2"> {{set.bonusDesc2}}</p>
+      <p style="color: #eeeeee;" *ngIf="set.bonusDesc3"> {{set.bonusDesc3}}</p>
+      <p style="color: #eeeeee;" *ngIf="set.bonusDesc4"> {{set.bonusDesc4}}</p>
+      <p style="color: #eeeeee;" *ngIf="set.bonusDesc5"> {{set.bonusDesc5}}</p>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="notSearching">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

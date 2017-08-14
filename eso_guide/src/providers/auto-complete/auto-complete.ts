@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { QuestItem } from '../../model/questitem';
+import { QuestItem } from '../../model/quest';
 
 /*
   Generated class for the AutoCompleteProvider provider.

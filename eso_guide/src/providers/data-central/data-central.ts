@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { QuestItem } from '../../model/questitem';
+import { QuestItem } from '../../model/quest';
+import { SetSummary } from '../../model/set';
 
 /*
   Generated class for the DataCentralProvider provider.
@@ -10,19 +11,28 @@ import { QuestItem } from '../../model/questitem';
 @Injectable()
 export class DataCentralProvider {
   private questList: Array<QuestItem>;
+  private setList: Array<SetSummary>;
 
-  constructor() {
-    this.questList = new Array<QuestItem>();
-  }
+  constructor() { }
 
   public getQuestList(): Promise<any> {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       resolve(this.questList);
     });
   }
 
   public setQuestList(questList: Array<QuestItem>) {
     this.questList = questList;
+  }
+
+  public getSetList(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      resolve(this.setList);
+    });
+  }
+
+  public setSetList(setList: Array<SetSummary>) {
+    this.setList = setList;
   }
 
 }

@@ -9,11 +9,12 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseProvider } from 'angularfire2/database';
 
-import { MyApp } from './app.component';
+import { EsoGuide } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { StreamPage } from '../pages/stream/stream';
 import { QuestlistPage } from '../pages/questlist/questlist';
 import { QuestDetailPage } from '../pages/quest-detail/quest-detail';
+import { SetlistPage } from '../pages/setlist/setlist';
 import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
 import { SQLite } from '@ionic-native/sqlite';
 import { SqliteProvider } from '../providers/sqlite/sqlite';
@@ -34,27 +35,29 @@ export const firebaseConfig = {
 
 @NgModule({
   declarations: [
-    MyApp,
+    EsoGuide,
     HomePage,
     QuestlistPage,
     QuestDetailPage,
-    StreamPage
+    StreamPage,
+    SetlistPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     AutoCompleteModule,
     IonicStorageModule.forRoot(),
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(EsoGuide),
     AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    EsoGuide,
     HomePage,
     QuestlistPage,
     QuestDetailPage,
-    StreamPage
+    StreamPage,
+    SetlistPage
   ],
   providers: [
     StatusBar,

@@ -79,7 +79,7 @@ export class HomePage {
   }
 
   public openArticle(url: string) {
-    this.iab.create(url, '_blank');
+    this.iab.create(url, '_system');
   }
 
   loadArticles() {

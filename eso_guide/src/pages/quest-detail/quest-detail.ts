@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { RestapiProvider } from '../../providers/restapi/restapi';
 import { DataCentralProvider } from '../../providers/data-central/data-central';
-import { QuestDetail, Rewards, Steps } from '../../model/questdetail';
-import { QuestItem } from '../../model/questitem';
+import { QuestDetail, QuestItem, Rewards, Steps } from '../../model/quest';
 import { AdMobPro } from '@ionic-native/admob-pro';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 
