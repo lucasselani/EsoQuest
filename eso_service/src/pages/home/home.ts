@@ -462,7 +462,7 @@ export class HomePage {
     console.log(this.itemSummariesArray);
   }
 
-  // ---------------------------------------- SKILL DETAIL AND SKILL LIST --------------------------------------------------
+  // ---------------------------------------- SKILL DETAIL ----------------------------------------------------------
   fetchSkills() {
     this.configureLoadingDefault();
     this.loading.present().then(() => {
@@ -558,6 +558,106 @@ export class HomePage {
       this.loading.dismiss();
       this.loading = null;
     }
+  }
+  // ------------------------------------------ SKILL LIST -------------------------------------------
+
+  fetchSkillList() {
+    this.configureLoadingDefault();
+    this.loading.present().then(() => {
+      this.getSkillList(0);
+    });
+  }
+
+  getSkillList(skillValue) {
+    return this.restapi.getSkills(skillValue).then(data => {
+      return this.skillListTableToJSONSimplified(this.getTableContents(data._body), skillValue);
+    });
+  }
+
+  private skillListTableToJSONSimplified(table, skillValue) {
+    let rows = table.rows;
+    for (let i = 1; i < rows.length; i++) {
+      let skill = new SkillItem();
+      let breakLoop = false;
+
+      skill.name = rows[i].cells[5].textContent;
+      for (let j = 0; j < this.skillListArray.length; j++) {
+        if (this.skillListArray[j].name == skill.name) {
+          breakLoop = true;
+          break;
+        }
+      }
+      if (breakLoop) continue;
+
+      skill.abilityId = rows[i].cells[2].textContent;
+      skill.description = rows[i].cells[13].textContent;
+      try {
+        let iconInfo: string = rows[i].cells[3].innerHTML;
+        iconInfo = iconInfo.split('title="')[1].split(".dds")[0];
+        skill.icon = iconInfo + ".png";
+      } catch (err) {
+        skill.icon = "";
+        console.log(err);
+      }
+      try {
+
+        let skillInfo: string = rows[i].cells[4].textContent;
+        let skillInfoArray = skillInfo.split("::");
+        if (skillInfoArray.length == 1) {
+          skillInfoArray = skillInfo.split(":");
+        }
+        skill.className = skillInfoArray[0];
+        skill.skillLineName = skillInfoArray[1];
+      } catch (err) {
+        console.log(err);
+      }
+      this.skillListArray.push(skill);
+    }
+
+    if (rows.length == 301) {
+      skillValue += 300;
+      this.getSkillList(skillValue);
+    } else {
+      this.loading.dismiss();
+      this.loading = null;
+    }
+  }
+
+  skillListToFirebase() {
+    if (this.skillListArray.length == 0) {
+      alert('Fetch skillListArray first');
+      return;
+    }
+    this.configureLoadingDefault();
+    this.loading.present().then(() => {
+      this.firebaseSkillListArray = this.db.list('/skill-list');
+      this.uploadSkillList(0);
+    });
+  }
+
+  uploadSkillList(i) {
+    this.firebaseSkillListArray.update(`${this.skillListArray[i].name}`, this.skillListArray[i])
+      .then(() => {
+        if (i == this.skillListArray.length - 1) {
+          this.loading.dismiss();
+          this.loading = null;
+          return;
+        } else {
+          console.log(`push skill: ${this.skillListArray[i].name} to firebase successfull`);
+          this.uploadSkillList(i + 1);
+        }
+      }).catch((err) => {
+        console.log(`error to push to firebase: ${err}`);
+        this.uploadSkillList(i);
+      });
+  }
+
+  logSkillList() {
+    if (this.skillListArray.length == 0) {
+      alert('Fetch skillListArray first');
+      return;
+    }
+    console.log(this.skillListArray);
   }
 
   // --------------------------------------------- UTILS ---------------------------------------------

@@ -20,4 +20,6 @@ export class SkillItem {
     name: string;
     description: string;
     icon: string;
+    className: string;
+    skillLineName: string;
 }
