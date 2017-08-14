@@ -11,30 +11,32 @@
 </ion-header>
 
 
-<ion-content *ngIf="quest" class="background" padding>
- <!-- <h2> {{quest.name}} ({{quest.repeatType}})</h2>
-  <h5>
-    <ion-icon name="pin"></ion-icon>
-    {{quest.zone}} 
-  </h5>
-  <p> {{quest.backgroundText}} </p>
-  <h2> Rewards: </h2>
-  <ion-list>
-    <div *ngFor="let reward of quest.rewards">
-      <ion-item text-wrap *ngIf="reward.quantity != 0">
-        {{reward.quantity}} {{reward.name}}
-      </ion-item>
-    </div>
-  </ion-list>
-  <h2> Steps: </h2>
-  <ion-list>
-    <div *ngFor="let step of quest.steps">
-      <ion-item text-wrap *ngIf="step.text">
-        <h3 style="margin-top: 4px">
-          {{step.stageIndex}}.{{step.stepIndex}}. {{step.overrideText}} at {{step.zone}}
-        </h3>
-        <p>{{step.text}}</p>
-      </ion-item>
-    </div>
-  </ion-list> -->
+<ion-content class="background" padding>
+  <div *ngIf="quest">
+    <h2> {{quest.name}} ({{quest.repeatType}})</h2>
+    <h5>
+      <ion-icon name="pin"></ion-icon>
+      {{quest.zone}}
+    </h5>
+    <p> {{quest.backgroundText}} </p>
+    <h2> Rewards: </h2>
+    <ion-list>
+      <div *ngFor="let reward of quest.rewards">
+        <ion-item text-wrap *ngIf="reward.quantity != 0">
+          {{reward.quantity}} {{reward.name}}
+        </ion-item>
+      </div>
+    </ion-list>
+    <h2> Steps: </h2>
+    <ion-list>
+      <div *ngFor="let step of quest.steps">
+        <ion-item text-wrap *ngIf="step.text">
+          <h3 style="margin-top: 4px">
+            {{step.stageIndex}}.{{step.stepIndex}}. {{step.overrideText}} at {{step.zone}}
+          </h3>
+          <p>{{step.text}}</p>
+        </ion-item>
+      </div>
+    </ion-list>
+  </div>
 </ion-content>

@@ -53,61 +53,13 @@ export class MyApp {
   }
 
   getQuests() {
-    console.log('getting quests');
-    this.quests = new Array<QuestItem>();
-    this.getQuestsFirebase();
-    /*this.getQuestsHttp();
-    /this.sqlite.getQuestsSql().then(data => {
-        if (data.length == 0) this.getQuestsHttp();
-        else{
-          this.quests = data;
-          this.events.publish('questListReady', this.quests);
-        } 
-    });*/
-  }
-
-  getQuestsFirebase() {
+    console.log('getting quests');    
     this.firebaseQuests.subscribe(data => {
-      this.quests = data[0];
+      this.quests = new Array<QuestItem>();
+      this.quests = data;
       this.dataCentral.setQuestList(this.quests);
+      console.log('quests got. size: ' + this.quests.length);
     });
-  }
-
-  getQuestsHttp() {
-    this.restapi.getQuests(this.questValue).then(data => {
-      this.table = data._body;
-      //console.log(this.table);
-      let firstSplit = this.table.split("<table border='1' cellspacing='0' cellpadding='2'>");
-      let secondSplit = firstSplit[1].split("</table>");
-
-      let s = secondSplit[0];
-      let temp = document.createElement('table');
-      temp.innerHTML = s;
-      //console.log(s);
-
-      this.tableToJSON(temp);
-    });
-  }
-
-  tableToJSON(table) {
-    let rows = table.rows;
-    for (let i = 1; i < rows.length; i++) {
-      let quest = new QuestItem();
-      quest.id = rows[i].cells[1].textContent;
-      quest.zone = rows[i].cells[2].textContent;
-      quest.name = rows[i].cells[3].textContent;
-      quest.level = rows[i].cells[4].textContent;
-      this.quests.push(quest);
-    }
-
-    if (rows.length == 301) {
-      this.questValue += 300;
-      this.getQuestsHttp();
-    } else {
-      //this.sqlite.addAllSql(this.quests);
-      //this.firebaseQuests.push(this.quests);
-      this.dataCentral.setQuestList(this.quests);
-    }
   }
 }
 

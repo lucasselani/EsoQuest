@@ -41,10 +41,11 @@ export class QuestlistPage {
     this.dataCentral.getQuestList().then((questList) => {
       this.allQuests = questList;
       this.autoComplete.setDataProvider(this.allQuests, "name", "sliceStringAndCompare");
-      console.log(`quests got, size: ${questList.length}`);
+      this.filterList("name");
       this.quests = new Array<QuestItem>();
       this.quests.push(...this.allQuests.slice(0, SCROLL_SIZE));
       this.itemsShown += SCROLL_SIZE;
+      console.log('page ready');
     });
   }
 
@@ -78,16 +79,13 @@ export class QuestlistPage {
     if (keyword == "") {
       this.pageName = "Quests";
       this.quests.push(...this.allQuests.slice(0, SCROLL_SIZE));
-      this.itemsShown += SCROLL_SIZE;
+      this.itemsShown = SCROLL_SIZE;
       this.notSearching = true;
       return;
     } else if (keyword.trim() == "") return;
 
     keyword = keyword.trim();
-    let results: Array<QuestItem> = new Array<QuestItem>();
-    this.allQuests.forEach(item => {
-      if (item.name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())) results.push(item);
-    });
+    let results: Array<QuestItem> = this.autoComplete.suggestions;
 
     if (results.length == 0) {
       alert("No results found.");
@@ -147,8 +145,10 @@ export class QuestlistPage {
       this.quests.sort(this.sortListByParameter(data));
       if (this.loading != null) {
         this.loading.dismiss().then(() => {
-          this.alert.dismiss();
-          this.alert = null;
+          if (this.alert != null) {
+            this.alert.dismiss();
+            this.alert = null;
+          }
         });
         this.loading = null;
       }

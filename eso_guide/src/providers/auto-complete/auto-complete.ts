@@ -11,6 +11,7 @@ import { QuestItem } from '../../model/questitem';
 export class AutoCompleteProvider {
   private data = [];
   private filterMethod: string;
+  public suggestions = [];
   labelAttribute = "";
 
 
@@ -25,7 +26,7 @@ export class AutoCompleteProvider {
   getResults(keyword: string) {
     let filterArray = this.filterMethods[this.filterMethod];
     let data = filterArray(keyword.toLocaleLowerCase());
-    return data;
+    return this.suggestions = data;
   }
 
   filterMethods = {
