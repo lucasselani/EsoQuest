@@ -8,6 +8,7 @@ import { DataCentralProvider } from '../providers/data-central/data-central';
 import { HomePage } from '../pages/home/home';
 import { StreamPage } from '../pages/stream/stream';
 import { SetlistPage } from '../pages/setlist/setlist';
+import { SkillListPage } from '../pages/skill-list/skill-list';
 import { QuestItem } from '../model/quest';
 import { SetSummary } from '../model/set';
 import { QuestlistPage } from '../pages/questlist/questlist';
@@ -19,16 +20,11 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 })
 export class EsoGuide {
   @ViewChild(Nav) nav: Nav;
-
-  pages: Array<{ title: string, component: any }>;
+  pages: Array<{title: string, component: any}>;
   rootPage: any = HomePage;
-  table: string;
-  quests: Array<QuestItem>;
-  sets: Array<SetSummary>;
   firebaseQuests: FirebaseListObservable<any[]>;
   firebaseSets: FirebaseListObservable<any[]>;
-  questValue: number = 0;
-  admobid = {};
+  firebaseSkills: FirebaseListObservable<any[]>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, //public sqlite: SqliteProvider,
     public restapi: RestapiProvider, public dataCentral: DataCentralProvider, public db: AngularFireDatabase) {
@@ -38,7 +34,7 @@ export class EsoGuide {
       { title: 'News', component: HomePage },
       { title: 'Quests', component: QuestlistPage },
       { title: 'Sets', component: SetlistPage },
-      { title: 'Skills', component: QuestlistPage },
+      { title: 'Skills', component: SkillListPage },
       { title: 'Streams', component: StreamPage }
     ];
   }
@@ -60,19 +56,21 @@ export class EsoGuide {
   getFirebaseContents() {
     this.firebaseQuests = this.db.list('/quests');
     this.firebaseSets = this.db.list('/set-summary');
+    this.firebaseSkills = this.db.list('/skill-list')
 
-    console.log('getting quests');
+    console.log('getting quests');    
     this.firebaseQuests.subscribe(data => {
-      this.quests = new Array<QuestItem>();
-      this.quests = data;
-      this.dataCentral.setQuestList(this.quests);
-      console.log('quests got. size: ' + this.quests.length);
-      console.log('getting quests');
+      this.dataCentral.setQuestList(data);
+      console.log('quests got. size: ' + data.length);      
+      console.log('getting sets');
       this.firebaseSets.subscribe(data => {
-        this.sets = new Array<SetSummary>();
-        this.sets = data;
-        this.dataCentral.setSetList(this.sets);
-        console.log('sets got. size: ' + this.sets.length);
+        this.dataCentral.setSetList(data);
+        console.log('sets got. size: ' + data.length);        
+        console.log('getting skills');
+        this.firebaseSkills.subscribe(data => {
+          this.dataCentral.setSkillList(data);
+          console.log('skills got. size: ' + data.length);
+        })
       })
     });
   }

@@ -15,6 +15,8 @@ import { StreamPage } from '../pages/stream/stream';
 import { QuestlistPage } from '../pages/questlist/questlist';
 import { QuestDetailPage } from '../pages/quest-detail/quest-detail';
 import { SetlistPage } from '../pages/setlist/setlist';
+import { ItemlistPage } from '../pages/itemlist/itemlist';
+import { SkillListPage } from '../pages/skill-list/skill-list';
 import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
 import { SQLite } from '@ionic-native/sqlite';
 import { SqliteProvider } from '../providers/sqlite/sqlite';
@@ -40,7 +42,9 @@ export const firebaseConfig = {
     QuestlistPage,
     QuestDetailPage,
     StreamPage,
-    SetlistPage
+    SetlistPage,
+    ItemlistPage,
+    SkillListPage
   ],
   imports: [
     BrowserModule,
@@ -57,7 +61,9 @@ export const firebaseConfig = {
     QuestlistPage,
     QuestDetailPage,
     StreamPage,
-    SetlistPage
+    SetlistPage,
+    ItemlistPage,
+    SkillListPage
   ],
   providers: [
     StatusBar,

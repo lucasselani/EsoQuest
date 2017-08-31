@@ -5,14 +5,63 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>itemlist</ion-title>
+    <ion-title>{{setName}}'s set items</ion-title>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content padding class="background">
+  <ion-list>
+    <ion-item *ngFor="let item of items" class="dark-list" no-lines text-wrap>
+      <div id="esoil_itemcontainer">
+        <div id="esoil_outeritembox">
+          <div id="esoil_itembox">
+            <div id="esoil_itemstyle">{{item.style}}</div>
+            <img src={{item.icon}} id="esoil_itemicon">
+            <div id="esoil_itemtype1">{{item.type}}</div>
+            <div id="esoil_itemtype2">({{item.equipeType}})</div>
+            <div id="esoil_itembindtype">{{item.bindType}}</div>
+            <div id="esoil_itemname" class="esoil_quality_Trash">{{item.name}}</div>
+            <div id="esoil_datablock">
+              <div id="esoil_itemleftblock" style="display:inline-block;"
+              *ngIf="item.armorRating != 0">ARMOR
+                <div id="esoil_itemleft">{{item.armorRating}}</div>
+              </div>
+              <div id="esoil_itemleftblock" style="display:inline-block;"
+              *ngIf="item.weaponPower != 0">POWER
+                <div id="esoil_itemleft">{{item.weaponPower}}</div>
+              </div>
+              <div id="esoil_itemlevelblock" style="display:inline-block;">LEVEL
+                <div id="esoil_itemlevel">{{item.level}}</div>
+              </div>
+            </div>
+            <div id="esoil_itemabilityblock">{{item.abilityDesc}}</div>
+            <div id="esoil_itemtraitabilityblock">{{item.traitAbilityDesc}}</div>
+            <div id="esoil_itemenchantblock">{{item.enchantDesc}}</div>
+            <div id="esoil_itemtraitblock">
+              <div class="esoil_white esoil_small">{{item.trait}}</div><br>
+              <div class="esoil_white">{{item.traitDesc}}</div> 
+            <div id="esoil_itemsetblock">
+              <div class="esoil_white esoil_small">PART OF {{setName | uppercase}} SET</div><br>
+              <div class="esoil_white" *nfIf="item.setBonusDesc1">(2 items) Adds {{item.setBonusDesc1}}</div><br>
+              <div class="esoil_white" *nfIf="item.setBonusDesc2">(3 items) Adds {{item.setBonusDesc2}}</div><br>
+              <div class="esoil_white" *nfIf="item.setBonusDesc3">(4 items) Adds {{item.setBonusDesc3}}</div><br>
+              <div class="esoil_white" *nfIf="item.setBonusDesc4">(5 items) Adds {{item.setBonusDesc4}}</div></div>
+              <div class="esoil_white" *nfIf="item.setBonusDesc5">(6 items) Adds {{item.setBonusDesc5}}</div></div>
+            <div id="esoil_itemdyestampblock"></div>
+            <div id="esoil_itemdesc" class="">{{item.description}}</div>
+            <div id="esoil_itemtags"></div>
+            <div id="esoil_itemcraftedblock"></div>
+            <div id="esoil_itemnewvalueblock" style="display:inline-block">
+              <div id="esoil_itemnewvalue">{{item.value}}</div> <img src="" class="esoil_goldimg"></div>
+          </div>
+        </div>
+        <br>           
+    </ion-item>
+  </ion-list>
 
-<ion-content padding>
-
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="notSearching">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

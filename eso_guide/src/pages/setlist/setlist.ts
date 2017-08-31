@@ -52,8 +52,8 @@ export class SetlistPage {
     })
   }
 
-  openSetInList(id) {
-    this.navCtrl.push(ItemlistPage, id);
+  openSetInList(set) {
+    this.navCtrl.push(ItemlistPage, set);
   }
 
   ionViewDidLoad() {

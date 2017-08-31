@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QuestItem } from '../../model/quest';
 import { SetSummary } from '../../model/set';
+import { SkillItem } from '../../model/skill';
 
 /*
   Generated class for the DataCentralProvider provider.
@@ -12,6 +13,7 @@ import { SetSummary } from '../../model/set';
 export class DataCentralProvider {
   private questList: Array<QuestItem>;
   private setList: Array<SetSummary>;
+  private skillList: Array<SkillItem>;
 
   constructor() { }
 
@@ -35,4 +37,13 @@ export class DataCentralProvider {
     this.setList = setList;
   }
 
+  public getSkillList(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      resolve(this.skillList);
+    });
+  }
+
+  public setSkillList(skillList: Array<SkillItem>) {
+    this.skillList = skillList;
+  }
 }

@@ -62,7 +62,11 @@ export class HomePage {
     this.configureLoadingDefault();
     this.loading.present().then(() => {
       this.firebaseQuestDetailArray = this.db.list('/quests-detail');
-      this.uploadQuestsDetail(0);
+      this.firebaseQuestDetailArray.remove().then(() => {
+        this.firebaseQuestDetailArray = this.db.list('/quests-detail');
+        this.uploadQuestsDetail(0);
+      })
+
     });
   }
 

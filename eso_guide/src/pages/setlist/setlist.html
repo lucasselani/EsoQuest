@@ -18,7 +18,7 @@
   [dataProvider]="autoComplete" #searchbar></ion-auto-complete>
   <br><br>
   <ion-list>
-    <ion-item *ngFor="let set of sets" (click)="openSetInList(set.id)" class="dark-list" no-lines text-wrap>
+    <ion-item *ngFor="let set of sets" (click)="openSetInList(set)" class="dark-list" no-lines text-wrap>
       <h2 style="color: white; font-weight: bold; ">{{set.name}}</h2>
       <p style="color: #eeeeee;" *ngIf="set.bonusDesc1"> {{set.bonusDesc1}}</p>
       <p style="color: #eeeeee;" *ngIf="set.bonusDesc2"> {{set.bonusDesc2}}</p>
