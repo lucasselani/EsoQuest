@@ -1,3 +1,21 @@
 page-skill-list {
+    .background {
+        background: url("../assets/background.jpg") no-repeat center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
 
+    ion-item.dark-list {
+        background: rgba(0,0,0,0.7) !important;
+        border-bottom: 1px solid !important;
+        margin-bottom: 4px;
+    }
+
+    .item .item-content {
+        background-color: transparent !important;
+    }
+
+    .toolbar-background {
+         background-color: transparent;
+    }
 }

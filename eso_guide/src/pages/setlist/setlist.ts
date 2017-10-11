@@ -52,10 +52,6 @@ export class SetlistPage {
     })
   }
 
-  openSetInList(set) {
-    this.navCtrl.push(ItemlistPage, set);
-  }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad SetlistPage');
   }
@@ -81,6 +77,42 @@ export class SetlistPage {
     this.sets.push(...this.allSets.slice(this.itemsShown, this.itemsShown + SCROLL_SIZE));
     this.itemsShown += SCROLL_SIZE;
     event.complete();
+  }
+
+  openSetInList(set) {
+    this.navCtrl.push(ItemlistPage, set);
+  }
+
+  openSetInSearchbar() {
+    let name = this.searchbar.getValue();
+    this.searchbar.clearValue();
+    this.sets.forEach(item => {
+      if (item.name == name) this.navCtrl.push(ItemlistPage, item);
+    });
+  }
+
+  searchInSetsPage() {
+    let keyword = this.searchbar.keyword;
+    if (keyword == "") {
+      this.pageName = "Sets";
+      this.sets.push(...this.allSets.slice(0, SCROLL_SIZE));
+      this.itemsShown = SCROLL_SIZE;
+      this.notSearching = true;
+      return;
+    } else if (keyword.trim() == "") return;
+
+    keyword = keyword.trim();
+    let results: Array<SetSummary> = this.autoComplete.suggestions;
+
+    if (results.length == 0) {
+      alert("No results found.");
+      this.searchbar.clearValue();
+    } else {
+      this.itemsShown = 0;
+      this.notSearching = false;
+      this.pageName = `Search for "${keyword}"`;
+      this.sets = results;
+    }
   }
 
 }

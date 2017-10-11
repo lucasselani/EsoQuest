@@ -5,14 +5,33 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>skill-list</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Sets</ion-title>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content padding class="background">
+  <ion-auto-complete (search)="searchInSkillsPage()" (itemSelected)="openSkillInSearchbar()" [dataProvider]="autoComplete"
+    #searchbar></ion-auto-complete>
+  <br><br>
+  <ion-list>
+    <ion-item *ngFor="let skill of skills" (click)="openSkillInList(skill)" class="dark-list" no-lines>
+      <div item-start>
+        <ion-avatar class="rounded-avatar">
+          <img src={{skill.icon}}/>
+        </ion-avatar>
+      </div>
 
-<ion-content padding>
+      <h2 style="color: white">{{skill.name}}</h2>
+      <p style="color: white; height: 25px; line-height: 30px"> {{skill.description}} </p>
+    </ion-item>
+  </ion-list>
 
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="notSearching">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

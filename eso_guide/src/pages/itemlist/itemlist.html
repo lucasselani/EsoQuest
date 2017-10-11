@@ -23,12 +23,10 @@
             <div id="esoil_itembindtype">{{item.bindType}}</div>
             <div id="esoil_itemname" class="esoil_quality_Trash">{{item.name}}</div>
             <div id="esoil_datablock">
-              <div id="esoil_itemleftblock" style="display:inline-block;"
-              *ngIf="item.armorRating != 0">ARMOR
+              <div id="esoil_itemleftblock" style="display:inline-block;" *ngIf="item.armorRating != 0">ARMOR
                 <div id="esoil_itemleft">{{item.armorRating}}</div>
               </div>
-              <div id="esoil_itemleftblock" style="display:inline-block;"
-              *ngIf="item.weaponPower != 0">POWER
+              <div id="esoil_itemleftblock" style="display:inline-block;" *ngIf="item.weaponPower != 0">POWER
                 <div id="esoil_itemleft">{{item.weaponPower}}</div>
               </div>
               <div id="esoil_itemlevelblock" style="display:inline-block;">LEVEL
@@ -39,24 +37,33 @@
             <div id="esoil_itemtraitabilityblock">{{item.traitAbilityDesc}}</div>
             <div id="esoil_itemenchantblock">{{item.enchantDesc}}</div>
             <div id="esoil_itemtraitblock">
-              <div class="esoil_white esoil_small">{{item.trait}}</div><br>
-              <div class="esoil_white">{{item.traitDesc}}</div> 
-            <div id="esoil_itemsetblock">
-              <div class="esoil_white esoil_small">PART OF {{setName | uppercase}} SET</div><br>
-              <div class="esoil_white" *nfIf="item.setBonusDesc1">(2 items) Adds {{item.setBonusDesc1}}</div><br>
-              <div class="esoil_white" *nfIf="item.setBonusDesc2">(3 items) Adds {{item.setBonusDesc2}}</div><br>
-              <div class="esoil_white" *nfIf="item.setBonusDesc3">(4 items) Adds {{item.setBonusDesc3}}</div><br>
-              <div class="esoil_white" *nfIf="item.setBonusDesc4">(5 items) Adds {{item.setBonusDesc4}}</div></div>
-              <div class="esoil_white" *nfIf="item.setBonusDesc5">(6 items) Adds {{item.setBonusDesc5}}</div></div>
+              <div class="esoil_white esoil_small">{{item.trait}}</div>
+              <br>
+              <div class="esoil_white">{{item.traitDesc}}</div>
+              <div id="esoil_itemsetblock">
+                <div class="esoil_white esoil_small">PART OF {{setName | uppercase}} SET</div>
+                <br>
+                <div class="esoil_white" *ngIf="item.setBonusDesc1">(2 items) Adds {{item.setBonusDesc1}}</div>
+                <br>
+                <div class="esoil_white" *ngIf="item.setBonusDesc2">(3 items) Adds {{item.setBonusDesc2}}</div>
+                <br>
+                <div class="esoil_white" *ngIf="item.setBonusDesc3">(4 items) Adds {{item.setBonusDesc3}}</div>
+                <br>
+                <div class="esoil_white" *ngIf="item.setBonusDesc4">(5 items) Adds {{item.setBonusDesc4}}</div>
+              </div>
+              <div class="esoil_white" *ngIf="item.setBonusDesc5">(6 items) Adds {{item.setBonusDesc5}}</div>
+            </div>
             <div id="esoil_itemdyestampblock"></div>
             <div id="esoil_itemdesc" class="">{{item.description}}</div>
             <div id="esoil_itemtags"></div>
             <div id="esoil_itemcraftedblock"></div>
             <div id="esoil_itemnewvalueblock" style="display:inline-block">
-              <div id="esoil_itemnewvalue">{{item.value}}</div> <img src="" class="esoil_goldimg"></div>
+              <div id="esoil_itemnewvalue">{{item.value}}</div>
+              <img src="" class="esoil_goldimg">
+            </div>
           </div>
         </div>
-        <br>           
+      </div>
     </ion-item>
   </ion-list>
 
